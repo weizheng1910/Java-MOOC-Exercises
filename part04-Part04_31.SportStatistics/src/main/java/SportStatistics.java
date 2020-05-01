@@ -11,46 +11,53 @@ public class SportStatistics {
         String dataFile = scan.nextLine();
         System.out.println("Team: ");
         String team = scan.nextLine();
-        
+
         int gamesParticipated = 0;
         int gamesWon = 0;
         int gamesLost = 0;
-        
-        try(Scanner fileObject = new Scanner(Paths.get(dataFile))){
-            while(fileObject.hasNextLine()){
+
+        try ( Scanner fileObject = new Scanner(Paths.get(dataFile))) {
+            while (fileObject.hasNextLine()) {
                 String row = fileObject.nextLine();
                 String[] splittedData = row.split(",");
-                if(splittedData[0].equals(team) || splittedData[1].equals(team)){
+
+                String home = splittedData[0];
+                String away = splittedData[1];
+                String homeScore = splittedData[2];
+                String awayScore = splittedData[3];
+
+                if (home.equals(team) || away.equals(team)) {
                     gamesParticipated++;
-                    
+
                     int teamScore = 0;
                     int oppScore = 0;
-                    
-                    if(splittedData[0].equals(team)){
+
+                    if (home.equals(team)) {
                         // Team plays Home
-                        teamScore = Integer.valueOf(splittedData[2]);
-                        oppScore = Integer.valueOf(splittedData[3]);
-                        
-                        
+                        teamScore = Integer.valueOf(homeScore);
+                        oppScore = Integer.valueOf(awayScore);
+
                     }
-                    
-                    if(splittedData[1].equals(team)){
-                        teamScore = Integer.valueOf(splittedData[3]);
-                        oppScore = Integer.valueOf(splittedData[2]);
+
+                    if (away.equals(team)) {
+                        // Team plays Away
+                        teamScore = Integer.valueOf(awayScore);
+                        oppScore = Integer.valueOf(homeScore);
                     }
-                    
-                    if(teamScore > oppScore){
-                            gamesWon++;
-                        } else {
-                            gamesLost++;
-                        }
-                } 
+
+                    if (teamScore > oppScore) {
+                        //Team won
+                        gamesWon++;
+                    } else {
+                        gamesLost++;
+                    }
+                }
             }
-            
+
             System.out.println("Games: " + gamesParticipated);
             System.out.println("Wins: " + gamesWon);
             System.out.println("Losses: " + gamesLost);
-        } catch(Exception e){
+        } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
 
